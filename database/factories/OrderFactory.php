@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 /** @var Factory $factory */
 
+use App\Order;
 use App\Partner;
 use Carbon\Carbon;
 use Faker\Generator as Faker;
@@ -21,5 +22,19 @@ $factory->define(App\Order::class, function (Faker $faker) {
         'delivery_dt'  => $createdAt->copy()->addHours(rand(6, 50)),
         'created_at'   => $createdAt,
         'updated_at'   => $createdAt->copy()->addHours(rand(1, 5)),
+    ];
+});
+
+$factory->state(Order::class, 'newest', function () {
+    return [
+        'status'      => Order::STATUS_NEW,
+        'delivery_dt' => now()->addDay(),
+    ];
+});
+
+$factory->state(Order::class, 'overtaken', function () {
+    return [
+        'status'      => Order::STATUS_CONFIRMED,
+        'delivery_dt' => now()->subDay(),
     ];
 });

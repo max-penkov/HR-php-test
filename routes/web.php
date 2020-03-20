@@ -20,4 +20,5 @@ Route::group([
     'prefix'    => 'orders',
 ], function () {
     Route::get('/newest', 'OrderController@newest')->name('newest');
+    Route::get('/overtaken', 'OrderController@overtaken')->name('overtaken');
 });

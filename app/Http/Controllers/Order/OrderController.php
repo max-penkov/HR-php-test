@@ -20,12 +20,22 @@ class OrderController extends Controller
     }
 
     /**
-     * Получаем спико новых заказов
+     * Получаем список новых заказов
      *
      * @return LengthAwarePaginator
      */
     public function newest()
     {
         return $this->orderService->newest();
+    }
+
+    /**
+     * Получаем список просроченных заказов
+     *
+     * @return mixed
+     */
+    public function overtaken()
+    {
+        return $this->orderService->overtaken();
     }
 }

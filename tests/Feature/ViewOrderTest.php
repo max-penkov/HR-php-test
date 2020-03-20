@@ -23,17 +23,32 @@ class ViewOrderTest extends TestCase
      */
     public function can_get_newest_orders()
     {
-        $this->disableExceptionHandling();
-        factory(Order::class)->times(10)->create([
-            'status' => Order::STATUS_NEW,
-            'delivery_dt' => now()->addDay(10)
-        ]);
+        $count = 10;
+        factory(Order::class)->times($count)->states('newest')->create();
 
         $response = $this->getJson('/orders/newest')
             ->assertStatus(Response::HTTP_OK)
             ->json();
 
-        $this->assertCount(10, $response['data']);
-        $this->assertEquals(10, $response['total']);
+        $this->assertCount($count, $response['data']);
+        $this->assertEquals($count, $response['total']);
+    }
+
+    /**
+     * @test
+     */
+    public function can_get_overtaken_orders()
+    {
+        $this->disableExceptionHandling();
+        $count      = 10;
+
+        factory(Order::class)->times($count)->states('overtaken')->create();
+
+        $response = $this->getJson('/orders/overtaken')
+            ->assertStatus(Response::HTTP_OK)
+            ->json();
+
+        $this->assertCount($count, $response['data']);
+        $this->assertEquals($count, $response['total']);
     }
 }

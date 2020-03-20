@@ -8,6 +8,8 @@ use App\Order;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
+ * Сервис для работы с заказами
+ *
  * Class OrderService
  * @package App\UseCases
  */
@@ -27,5 +29,17 @@ class OrderService
             ])
             ->orderBy('delivery_dt')
             ->paginate(self::PER_PAGE);
+    }
+
+    /**
+     * @return LengthAwarePaginator
+     */
+    public function overtaken()
+    {
+        return Order::with('partner')
+            ->where([
+                'status' => Order::STATUS_CONFIRMED,
+                ['delivery_dt', '<', now()],
+            ])->paginate(self::PER_PAGE);
     }
 }
