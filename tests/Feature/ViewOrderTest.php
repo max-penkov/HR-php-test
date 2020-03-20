@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Order;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -29,6 +28,14 @@ class ViewOrderTest extends TestCase
         $this->count = 10;
     }
 
+    /**
+     * @test
+     */
+    public function get_orders_home_page()
+    {
+        $this->get('/orders')
+            ->assertStatus(Response::HTTP_OK);
+    }
 
     /**
      * @test

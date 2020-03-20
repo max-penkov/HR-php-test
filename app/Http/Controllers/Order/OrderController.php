@@ -5,8 +5,15 @@ namespace App\Http\Controllers\Order;
 use App\Order;
 use App\Http\Controllers\Controller;
 use App\UseCases\OrderService;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorAlias;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
+/**
+ * Class OrderController
+ * @package App\Http\Controllers\Order
+ */
 class OrderController extends Controller
 {
     /**
@@ -20,42 +27,76 @@ class OrderController extends Controller
     }
 
     /**
+     * Листинг всех ордеров
+     *
+     * @return Factory|View
+     */
+    public function index()
+    {
+        return view('orders.index');
+    }
+
+    /**
      * Получаем список новых заказов
      *
-     * @return LengthAwarePaginator
+     * @param Request $request
+     *
+     * @return LengthAwarePaginatorAlias|Factory|View
      */
-    public function newest()
+    public function newest(Request $request)
     {
-        return $this->orderService->newest();
+        if ($request->wantsJson()) {
+            return $this->orderService->newest();
+        }
+
+        return view('orders.newest');
     }
 
     /**
      * Получаем список просроченных заказов
      *
-     * @return mixed
+     * @param Request $request
+     *
+     * @return LengthAwarePaginatorAlias|Factory|View
      */
-    public function overtaken()
+    public function overtaken(Request $request)
     {
-        return $this->orderService->overtaken();
+        if ($request->wantsJson()) {
+            return $this->orderService->overtaken();
+        }
+
+        return view('orders.overtaken');
     }
 
     /**
      * Получаем список текущих заказов
      *
-     * @return LengthAwarePaginator
+     * @param Request $request
+     *
+     * @return LengthAwarePaginatorAlias|Factory|View
      */
-    public function current()
+    public function current(Request $request)
     {
-        return $this->orderService->current();
+        if ($request->wantsJson()) {
+            return $this->orderService->current();
+        }
+
+        return view('orders.current');
     }
 
     /**
      * Получаем список выполненных заказов
      *
-     * @return LengthAwarePaginator
+     * @param Request $request
+     *
+     * @return LengthAwarePaginatorAlias|Factory|View
      */
-    public function completed()
+    public function completed(Request $request)
     {
-        return $this->orderService->completed();
+        if ($request->wantsJson()) {
+            return $this->orderService->completed();
+        }
+
+        return view('orders.completed');
     }
 }

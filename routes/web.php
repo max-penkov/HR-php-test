@@ -18,7 +18,9 @@ Route::get('/', function () {
 Route::group([
     'namespace' => 'Order',
     'prefix'    => 'orders',
+    'as'        => 'order.',
 ], function () {
+    Route::get('/', 'OrderController@index')->name('index');
     Route::get('/newest', 'OrderController@newest')->name('newest');
     Route::get('/overtaken', 'OrderController@overtaken')->name('overtaken');
     Route::get('/current', 'OrderController@current')->name('current');

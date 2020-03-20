@@ -15,7 +15,10 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import BootstrapVue from 'bootstrap-vue';
+Vue.use(BootstrapVue);
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('order', require('./components/Order.vue'));
 
 const app = new Vue({
     el: '#app'
