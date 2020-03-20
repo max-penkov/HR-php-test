@@ -8,10 +8,10 @@
 			<a :href="/orders/ + data.item.id">{{ data.item.id }}</a>
 		</template>
 		<template v-slot:cell(status)="data">
-			<span :class="data.item.status === 10 ? activeClass: errorClass">{{ data.item.status ? 'Подтвержден' : 'Выполнен' }}</span>
+			<span :class="data.item.status === '10' ? errorClass: activeClass">{{ data.item.status === '10' ? 'Подтвержден' : (data.item.status === '20' ? 'Выполнен': 'Новый') }}</span>
 		</template>
 	</b-table>
-<!--	<paginator :dataSet="dataSet"></paginator>-->
+	<!--	<paginator :dataSet="dataSet"></paginator>-->
 </template>
 
 <script>

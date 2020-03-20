@@ -82618,9 +82618,19 @@ var render = function() {
               "span",
               {
                 class:
-                  data.item.status === 10 ? _vm.activeClass : _vm.errorClass
+                  data.item.status === "10" ? _vm.errorClass : _vm.activeClass
               },
-              [_vm._v(_vm._s(data.item.status ? "Подтвержден" : "Выполнен"))]
+              [
+                _vm._v(
+                  _vm._s(
+                    data.item.status === "10"
+                      ? "Подтвержден"
+                      : data.item.status === "20"
+                      ? "Выполнен"
+                      : "Новый"
+                  )
+                )
+              ]
             )
           ]
         }

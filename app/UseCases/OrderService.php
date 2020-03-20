@@ -50,7 +50,7 @@ class OrderService
     {
         return Order::with('partner')
             ->where('status', Order::STATUS_CONFIRMED)
-            ->WhereDay('delivery_dt', '>', 1)
+            ->WhereDay('delivery_dt', '=', now()->addDay()->format('d'))
             ->paginate(self::PER_PAGE);
     }
 

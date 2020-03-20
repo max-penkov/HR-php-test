@@ -31,18 +31,9 @@ class ViewOrderTest extends TestCase
     /**
      * @test
      */
-    public function get_orders_home_page()
-    {
-        $this->get('/orders')
-            ->assertStatus(Response::HTTP_OK);
-    }
-
-    /**
-     * @test
-     */
     public function can_get_newest_orders()
     {
-        factory(Order::class)->times($this->count)->states('newest')->create();
+        $this->createAllOrders();
 
         // Request orders
         $response = $this->getOrders('/orders/newest');
@@ -56,7 +47,7 @@ class ViewOrderTest extends TestCase
      */
     public function can_get_overtaken_orders()
     {
-        factory(Order::class)->times($this->count)->states('overtaken')->create();
+        $this->createAllOrders();
 
         // Request orders
         $response = $this->getOrders('/orders/overtaken');
@@ -70,7 +61,7 @@ class ViewOrderTest extends TestCase
      */
     public function can_get_current_orders()
     {
-        factory(Order::class)->times($this->count)->states('current')->create();
+        $this->createAllOrders();
 
         // Request orders
         $response = $this->getOrders('/orders/current');
@@ -84,7 +75,7 @@ class ViewOrderTest extends TestCase
      */
     public function can_get_completed_orders()
     {
-        factory(Order::class)->times($this->count)->states('completed')->create();
+        $this->createAllOrders();
 
         // Request orders
         $response = $this->getOrders('/orders/completed');
@@ -112,5 +103,13 @@ class ViewOrderTest extends TestCase
     {
         $this->assertCount($this->count, $response['data']);
         $this->assertEquals($this->count, $response['total']);
+    }
+
+    private function createAllOrders()
+    {
+        factory(Order::class)->times($this->count)->states('newest')->create();
+        factory(Order::class)->times($this->count)->states('overtaken')->create();
+        factory(Order::class)->times($this->count)->states('current')->create();
+        factory(Order::class)->times($this->count)->states('completed')->create();
     }
 }

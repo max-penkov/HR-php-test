@@ -27,16 +27,6 @@ class OrderController extends Controller
     }
 
     /**
-     * Листинг всех ордеров
-     *
-     * @return Factory|View
-     */
-    public function index()
-    {
-        return view('orders.index');
-    }
-
-    /**
      * Получаем список новых заказов
      *
      * @param Request $request
