@@ -45,3 +45,10 @@ $factory->state(Order::class, 'current', function () {
         'delivery_dt' => now()->addDay(),
     ];
 });
+
+$factory->state(Order::class, 'completed', function () {
+    return [
+        'status'      => Order::STATUS_COMPLETED,
+        'delivery_dt' => now(),
+    ];
+});

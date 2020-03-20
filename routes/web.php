@@ -22,4 +22,5 @@ Route::group([
     Route::get('/newest', 'OrderController@newest')->name('newest');
     Route::get('/overtaken', 'OrderController@overtaken')->name('overtaken');
     Route::get('/current', 'OrderController@current')->name('current');
+    Route::get('/completed', 'OrderController@completed')->name('completed');
 });

@@ -74,4 +74,19 @@ class ViewOrderTest extends TestCase
         $this->assertCount($this->count, $response['data']);
         $this->assertEquals($this->count, $response['total']);
     }
+
+    /**
+     * @test
+     */
+    public function can_get_completed_orders()
+    {
+        factory(Order::class)->times($this->count)->states('completed')->create();
+
+        $response = $this->getJson('/orders/completed')
+            ->assertStatus(Response::HTTP_OK)
+            ->json();
+
+        $this->assertCount($this->count, $response['data']);
+        $this->assertEquals($this->count, $response['total']);
+    }
 }

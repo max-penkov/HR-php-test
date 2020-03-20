@@ -53,4 +53,16 @@ class OrderService
             ->WhereDay('delivery_dt', '>', 1)
             ->paginate(self::PER_PAGE);
     }
+
+    /**
+     * @return LengthAwarePaginator
+     */
+    public function completed()
+    {
+        return Order::with('partner')
+            ->where('status', Order::STATUS_COMPLETED)
+            ->whereDate('delivery_dt', now()->format('Y-m-d'))
+            ->paginate(self::PER_PAGE);
+
+    }
 }

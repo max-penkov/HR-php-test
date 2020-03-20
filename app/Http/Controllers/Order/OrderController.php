@@ -48,4 +48,14 @@ class OrderController extends Controller
     {
         return $this->orderService->current();
     }
+
+    /**
+     * Получаем список выполненных заказов
+     *
+     * @return LengthAwarePaginator
+     */
+    public function completed()
+    {
+        return $this->orderService->completed();
+    }
 }
