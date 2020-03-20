@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group([
+    'namespace' => 'Order',
+    'prefix'    => 'orders',
+], function () {
+    Route::get('/newest', 'OrderController@newest')->name('newest');
+});
