@@ -38,3 +38,10 @@ $factory->state(Order::class, 'overtaken', function () {
         'delivery_dt' => now()->subDay(),
     ];
 });
+
+$factory->state(Order::class, 'current', function () {
+    return [
+        'status'      => Order::STATUS_CONFIRMED,
+        'delivery_dt' => now()->addDay(),
+    ];
+});

@@ -21,4 +21,5 @@ Route::group([
 ], function () {
     Route::get('/newest', 'OrderController@newest')->name('newest');
     Route::get('/overtaken', 'OrderController@overtaken')->name('overtaken');
+    Route::get('/current', 'OrderController@current')->name('current');
 });

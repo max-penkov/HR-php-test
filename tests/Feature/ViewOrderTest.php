@@ -19,19 +19,30 @@ class ViewOrderTest extends TestCase
     use DatabaseMigrations;
 
     /**
+     * @var int
+     */
+    private $count;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->count = 10;
+    }
+
+
+    /**
      * @test
      */
     public function can_get_newest_orders()
     {
-        $count = 10;
-        factory(Order::class)->times($count)->states('newest')->create();
+        factory(Order::class)->times($this->count)->states('newest')->create();
 
         $response = $this->getJson('/orders/newest')
             ->assertStatus(Response::HTTP_OK)
             ->json();
 
-        $this->assertCount($count, $response['data']);
-        $this->assertEquals($count, $response['total']);
+        $this->assertCount($this->count, $response['data']);
+        $this->assertEquals($this->count, $response['total']);
     }
 
     /**
@@ -39,16 +50,28 @@ class ViewOrderTest extends TestCase
      */
     public function can_get_overtaken_orders()
     {
-        $this->disableExceptionHandling();
-        $count      = 10;
-
-        factory(Order::class)->times($count)->states('overtaken')->create();
+        factory(Order::class)->times($this->count)->states('overtaken')->create();
 
         $response = $this->getJson('/orders/overtaken')
             ->assertStatus(Response::HTTP_OK)
             ->json();
 
-        $this->assertCount($count, $response['data']);
-        $this->assertEquals($count, $response['total']);
+        $this->assertCount($this->count, $response['data']);
+        $this->assertEquals($this->count, $response['total']);
+    }
+
+    /**
+     * @test
+     */
+    public function can_get_current_orders()
+    {
+        factory(Order::class)->times($this->count)->states('current')->create();
+
+        $response = $this->getJson('/orders/current')
+            ->assertStatus(Response::HTTP_OK)
+            ->json();
+
+        $this->assertCount($this->count, $response['data']);
+        $this->assertEquals($this->count, $response['total']);
     }
 }

@@ -38,4 +38,14 @@ class OrderController extends Controller
     {
         return $this->orderService->overtaken();
     }
+
+    /**
+     * Получаем список текущих заказов
+     *
+     * @return LengthAwarePaginator
+     */
+    public function current()
+    {
+        return $this->orderService->current();
+    }
 }

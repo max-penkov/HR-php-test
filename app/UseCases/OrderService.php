@@ -42,4 +42,15 @@ class OrderService
                 ['delivery_dt', '<', now()],
             ])->paginate(self::PER_PAGE);
     }
+
+    /**
+     * @return LengthAwarePaginator
+     */
+    public function current()
+    {
+        return Order::with('partner')
+            ->where('status', Order::STATUS_CONFIRMED)
+            ->WhereDay('delivery_dt', '>', 1)
+            ->paginate(self::PER_PAGE);
+    }
 }
