@@ -37,12 +37,11 @@ class ViewOrderTest extends TestCase
     {
         factory(Order::class)->times($this->count)->states('newest')->create();
 
-        $response = $this->getJson('/orders/newest')
-            ->assertStatus(Response::HTTP_OK)
-            ->json();
+        // Request orders
+        $response = $this->getOrders('/orders/newest');
 
-        $this->assertCount($this->count, $response['data']);
-        $this->assertEquals($this->count, $response['total']);
+        // Assert
+        $this->assertOrdersByResponse($response);
     }
 
     /**
@@ -52,12 +51,11 @@ class ViewOrderTest extends TestCase
     {
         factory(Order::class)->times($this->count)->states('overtaken')->create();
 
-        $response = $this->getJson('/orders/overtaken')
-            ->assertStatus(Response::HTTP_OK)
-            ->json();
+        // Request orders
+        $response = $this->getOrders('/orders/overtaken');
 
-        $this->assertCount($this->count, $response['data']);
-        $this->assertEquals($this->count, $response['total']);
+        // Assert
+        $this->assertOrdersByResponse($response);
     }
 
     /**
@@ -67,12 +65,11 @@ class ViewOrderTest extends TestCase
     {
         factory(Order::class)->times($this->count)->states('current')->create();
 
-        $response = $this->getJson('/orders/current')
-            ->assertStatus(Response::HTTP_OK)
-            ->json();
+        // Request orders
+        $response = $this->getOrders('/orders/current');
 
-        $this->assertCount($this->count, $response['data']);
-        $this->assertEquals($this->count, $response['total']);
+        // Assert
+        $this->assertOrdersByResponse($response);
     }
 
     /**
@@ -82,10 +79,30 @@ class ViewOrderTest extends TestCase
     {
         factory(Order::class)->times($this->count)->states('completed')->create();
 
-        $response = $this->getJson('/orders/completed')
+        // Request orders
+        $response = $this->getOrders('/orders/completed');
+
+        // Assert
+        $this->assertOrdersByResponse($response);
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return array
+     */
+    private function getOrders(string $url): array
+    {
+        return $this->getJson($url)
             ->assertStatus(Response::HTTP_OK)
             ->json();
+    }
 
+    /**
+     * @param array $response
+     */
+    private function assertOrdersByResponse(array $response)
+    {
         $this->assertCount($this->count, $response['data']);
         $this->assertEquals($this->count, $response['total']);
     }
