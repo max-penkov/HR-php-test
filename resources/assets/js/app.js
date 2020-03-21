@@ -17,8 +17,10 @@ window.Vue = require('vue');
 
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
+
 Vue.component('example', require('./components/Example.vue'));
 Vue.component('order', require('./components/Order.vue'));
+Vue.component('paginator', require('./components/Paginator.vue'));
 
 const app = new Vue({
     el: '#app'

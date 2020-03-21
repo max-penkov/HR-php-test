@@ -1,17 +1,19 @@
 <template>
-	<b-table
-		:items="data"
-		:fields="fields"
-		dark
-	>
-		<template v-slot:cell(id)="data">
-			<a :href="/orders/ + data.item.id">{{ data.item.id }}</a>
-		</template>
-		<template v-slot:cell(status)="data">
-			<span :class="data.item.status === '10' ? errorClass: activeClass">{{ data.item.status === '10' ? 'Подтвержден' : (data.item.status === '20' ? 'Выполнен': 'Новый') }}</span>
-		</template>
-	</b-table>
-	<!--	<paginator :dataSet="dataSet"></paginator>-->
+	<div>
+		<b-table
+			:items="items"
+			:fields="fields"
+			dark
+		>
+			<template v-slot:cell(id)="data">
+				<a :href="/orders/ + data.item.id">{{ data.item.id }}</a>
+			</template>
+			<template v-slot:cell(status)="data">
+				<span :class="data.item.status === '10' ? errorClass: activeClass">{{ data.item.status === '10' ? 'Подтвержден' : (data.item.status === '20' ? 'Выполнен': 'Новый') }}</span>
+			</template>
+		</b-table>
+		<paginator :dataSet="dataSet" @changed="fetch"></paginator>
+	</div>
 </template>
 
 <script>
@@ -21,7 +23,7 @@
 			return {
 				activeClass: 'text-success',
 				errorClass: 'text-danger',
-				data: [],
+				items: [],
 				dataSet: false,
 				fields: [
 					{key: 'id', label: 'ID', sortable: true},
@@ -33,16 +35,31 @@
 			}
 		},
 		created() {
-			this.fetchAll();
+			this.fetch();
 		},
 
 		methods: {
-			fetchAll() {
-				axios.get(location.pathname).then(({data}) => {
-					this.data = data.data;
-					this.dataSet = data;
-				})
+			fetch(page) {
+				axios.get(this.url(page)).then(this.refresh);
 			},
+
+			url(page) {
+				if (! page) {
+					let query = location.search.match(/page=(\d+)/);
+
+					page = query ? query[1] : 1;
+				}
+
+				return `${location.pathname}?page=${page}`;
+			},
+
+			refresh({data}) {
+				this.dataSet = data;
+				this.items = data.data;
+
+				window.scrollTo(0, 0);
+			}
+			,
 		}
 	}
 </script>

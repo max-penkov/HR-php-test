@@ -33766,8 +33766,10 @@ window.Vue = __webpack_require__(59);
 
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_bootstrap_vue__["a" /* default */]);
+
 Vue.component('example', __webpack_require__(318));
 Vue.component('order', __webpack_require__(321));
+Vue.component('paginator', __webpack_require__(335));
 
 var app = new Vue({
   el: '#app'
@@ -82558,6 +82560,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	name: 'Call',
@@ -82565,26 +82569,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		return {
 			activeClass: 'text-success',
 			errorClass: 'text-danger',
-			data: [],
+			items: [],
 			dataSet: false,
 			fields: [{ key: 'id', label: 'ID', sortable: true }, { key: 'client_email', label: 'E-mail клиента', sortable: true }, { key: 'partner.name', label: 'Партнер', sortable: true }, { key: 'status', label: 'Статус' }, { key: 'delivery_dt', label: 'Дата доставки', sortable: true }]
 		};
 	},
 	created: function created() {
-		this.fetchAll();
+		this.fetch();
 	},
 
 
 	methods: {
-		fetchAll: function fetchAll() {
-			var _this = this;
+		fetch: function fetch(page) {
+			axios.get(this.url(page)).then(this.refresh);
+		},
+		url: function url(page) {
+			if (!page) {
+				var query = location.search.match(/page=(\d+)/);
 
-			axios.get(location.pathname).then(function (_ref) {
-				var data = _ref.data;
+				page = query ? query[1] : 1;
+			}
 
-				_this.data = data.data;
-				_this.dataSet = data;
-			});
+			return location.pathname + '?page=' + page;
+		},
+		refresh: function refresh(_ref) {
+			var data = _ref.data;
+
+			this.dataSet = data;
+			this.items = data.data;
+
+			window.scrollTo(0, 0);
 		}
 	}
 });
@@ -82597,46 +82611,59 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("b-table", {
-    attrs: { items: _vm.data, fields: _vm.fields, dark: "" },
-    scopedSlots: _vm._u([
-      {
-        key: "cell(id)",
-        fn: function(data) {
-          return [
-            _c("a", { attrs: { href: /orders/ + data.item.id } }, [
-              _vm._v(_vm._s(data.item.id))
-            ])
-          ]
-        }
-      },
-      {
-        key: "cell(status)",
-        fn: function(data) {
-          return [
-            _c(
-              "span",
-              {
-                class:
-                  data.item.status === "10" ? _vm.errorClass : _vm.activeClass
-              },
-              [
-                _vm._v(
-                  _vm._s(
-                    data.item.status === "10"
-                      ? "Подтвержден"
-                      : data.item.status === "20"
-                      ? "Выполнен"
-                      : "Новый"
-                  )
+  return _c(
+    "div",
+    [
+      _c("b-table", {
+        attrs: { items: _vm.items, fields: _vm.fields, dark: "" },
+        scopedSlots: _vm._u([
+          {
+            key: "cell(id)",
+            fn: function(data) {
+              return [
+                _c("a", { attrs: { href: /orders/ + data.item.id } }, [
+                  _vm._v(_vm._s(data.item.id))
+                ])
+              ]
+            }
+          },
+          {
+            key: "cell(status)",
+            fn: function(data) {
+              return [
+                _c(
+                  "span",
+                  {
+                    class:
+                      data.item.status === "10"
+                        ? _vm.errorClass
+                        : _vm.activeClass
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(
+                        data.item.status === "10"
+                          ? "Подтвержден"
+                          : data.item.status === "20"
+                          ? "Выполнен"
+                          : "Новый"
+                      )
+                    )
+                  ]
                 )
               ]
-            )
-          ]
-        }
-      }
-    ])
-  })
+            }
+          }
+        ])
+      }),
+      _vm._v(" "),
+      _c("paginator", {
+        attrs: { dataSet: _vm.dataSet },
+        on: { changed: _vm.fetch }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -82653,6 +82680,214 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 325 */,
+/* 326 */,
+/* 327 */,
+/* 328 */,
+/* 329 */,
+/* 330 */,
+/* 331 */,
+/* 332 */,
+/* 333 */,
+/* 334 */,
+/* 335 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(253)
+/* script */
+var __vue_script__ = __webpack_require__(336)
+/* template */
+var __vue_template__ = __webpack_require__(337)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Paginator.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-74bc836a", Component.options)
+  } else {
+    hotAPI.reload("data-v-74bc836a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 336 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	name: 'Paginator',
+
+	props: ['dataSet'],
+
+	data: function data() {
+		return {
+			page: 1,
+			prevUrl: false,
+			nextUrl: false
+		};
+	},
+
+
+	watch: {
+		dataSet: function dataSet() {
+			this.page = this.dataSet.current_page;
+			this.prevUrl = this.dataSet.prev_page_url;
+			this.nextUrl = this.dataSet.next_page_url;
+		},
+		page: function page() {
+			this.broadcast().updateUrl();
+		}
+	},
+
+	computed: {
+		shouldPaginate: function shouldPaginate() {
+			return !!this.prevUrl || !!this.nextUrl;
+		}
+	},
+
+	methods: {
+		broadcast: function broadcast() {
+			return this.$emit('changed', this.page);
+		},
+		updateUrl: function updateUrl() {
+			history.pushState(null, null, '?page=' + this.page);
+		}
+	}
+});
+
+/***/ }),
+/* 337 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.shouldPaginate
+    ? _c("ul", { staticClass: "pagination" }, [
+        _c(
+          "li",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.prevUrl,
+                expression: "prevUrl"
+              }
+            ]
+          },
+          [
+            _c(
+              "a",
+              {
+                attrs: { href: "#", "aria-label": "Previous", rel: "prev" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.page--
+                  }
+                }
+              },
+              [
+                _c("span", { attrs: { "aria-hidden": "true" } }, [
+                  _vm._v("« Предыдущая")
+                ])
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.nextUrl,
+                expression: "nextUrl"
+              }
+            ]
+          },
+          [
+            _c(
+              "a",
+              {
+                attrs: { href: "#", "aria-label": "Next", rel: "next" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.page++
+                  }
+                }
+              },
+              [
+                _c("span", { attrs: { "aria-hidden": "true" } }, [
+                  _vm._v("Следущая »")
+                ])
+              ]
+            )
+          ]
+        )
+      ])
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-74bc836a", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
