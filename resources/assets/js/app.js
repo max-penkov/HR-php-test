@@ -9,6 +9,11 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+window.events = new Vue();
+
+window.flash = function (message, level = 'success') {
+    window.events.$emit('flash', { message, level });
+};
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -18,9 +23,11 @@ window.Vue = require('vue');
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 
-Vue.component('example', require('./components/Example.vue'));
+Vue.component('orders', require('./components/Orders.vue'));
 Vue.component('order', require('./components/Order.vue'));
+Vue.component('products', require('./components/Products.vue'));
 Vue.component('paginator', require('./components/Paginator.vue'));
+Vue.component('flash', require('./components/Flash.vue'));
 
 const app = new Vue({
     el: '#app'

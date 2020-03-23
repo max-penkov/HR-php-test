@@ -11,17 +11,24 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Order\OrderController@newest');
 
 Route::group([
     'namespace' => 'Order',
     'prefix'    => 'orders',
     'as'        => 'order.',
 ], function () {
+    // Products
+    Route::get('/products', 'ProductController@index')->name('products');
+    Route::patch('/products/{orderProduct}', 'ProductController@update')->name('products.update');
+
+    // Orders
     Route::get('/newest', 'OrderController@newest')->name('newest');
     Route::get('/overtaken', 'OrderController@overtaken')->name('overtaken');
     Route::get('/current', 'OrderController@current')->name('current');
     Route::get('/completed', 'OrderController@completed')->name('completed');
+    Route::get('/{order}', 'OrderController@view')->name('view');
+    Route::patch('/{order}', 'OrderController@update')->name('update');
+
 });
+

@@ -7,5 +7,5 @@
 		<li class="nav-item active"><a href="{{ route('order.current') }}">Текущие</a></li>
 		<li class="nav-item"><a href="{{ route('order.overtaken') }}">Просроченные</a></li>
 	</ul>
-	<order></order>
+	<orders></orders>
 @endsection

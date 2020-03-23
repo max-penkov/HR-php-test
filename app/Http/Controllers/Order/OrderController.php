@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Order;
 
 use App\Order;
 use App\Http\Controllers\Controller;
+use App\Partner;
 use App\UseCases\OrderService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorAlias;
 use Illuminate\Contracts\View\Factory;
@@ -89,4 +90,35 @@ class OrderController extends Controller
 
         return view('orders.completed');
     }
+
+    /**
+     * @param Order $order
+     *
+     * @return Factory|View
+     */
+    public function view(Order $order)
+    {
+        $partners = Partner::all()->pluck('name', 'id');
+        return view('orders.show', compact('order', 'partners'));
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return Order
+     */
+    public function update(Order $order)
+    {
+        $data = request()->validate([
+            'client_email' => 'required|email',
+            'status'       => 'required|in:0,10,20',
+            'partner_id'   => 'required|exists:partners,id',
+            'products'     => 'nullable|array',
+        ]);
+
+        $order = $this->orderService->update($order, $data);
+
+        return $order;
+    }
+
 }

@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Mail\OrderCompleted;
 use App\Order;
+use App\OrderProduct;
+use App\Partner;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 /**
@@ -18,98 +22,52 @@ class ViewOrderTest extends TestCase
     use DatabaseMigrations;
 
     /**
-     * @var int
+     * @@test
      */
-    private $count;
-
-    protected function setUp()
+    public function view_order()
     {
-        parent::setUp();
-        $this->count = 10;
-    }
+        $order = factory(Order::class)->create();
 
-    /**
-     * @test
-     */
-    public function can_get_newest_orders()
-    {
-        $this->createAllOrders();
-
-        // Request orders
-        $response = $this->getOrders('/orders/newest');
-
-        // Assert
-        $this->assertOrdersByResponse($response);
-    }
-
-    /**
-     * @test
-     */
-    public function can_get_overtaken_orders()
-    {
-        $this->createAllOrders();
-
-        // Request orders
-        $response = $this->getOrders('/orders/overtaken');
-
-        // Assert
-        $this->assertOrdersByResponse($response);
-    }
-
-    /**
-     * @test
-     */
-    public function can_get_current_orders()
-    {
-        $this->createAllOrders();
-
-        // Request orders
-        $response = $this->getOrders('/orders/current');
-
-        // Assert
-        $this->assertOrdersByResponse($response);
-    }
-
-    /**
-     * @test
-     */
-    public function can_get_completed_orders()
-    {
-        $this->createAllOrders();
-
-        // Request orders
-        $response = $this->getOrders('/orders/completed');
-
-        // Assert
-        $this->assertOrdersByResponse($response);
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return array
-     */
-    private function getOrders(string $url): array
-    {
-        return $this->getJson($url)
+        $this->get("/orders/{$order->id}")
             ->assertStatus(Response::HTTP_OK)
-            ->json();
+            ->assertViewHas('order', function (Order $viewOrder) use ($order) {
+                return $order->id === $viewOrder->first()->id && count($order->products) === count($viewOrder->products);
+            });
     }
 
     /**
-     * @param array $response
+     * @test
      */
-    private function assertOrdersByResponse(array $response)
+    public function order_can_be_updated()
     {
-        $this->assertCount($this->count, $response['data']);
-        $this->assertEquals($this->count, $response['total']);
+        $order = factory(Order::class)->create([
+            'status' => Order::STATUS_NEW,
+        ]);
+
+        $this->patch("/orders/{$order->id}", [
+            'client_email' => $email = 'new@mail.ru',
+            'status'       => Order::STATUS_CONFIRMED,
+            'partner_id'   => $partnerId = factory(Partner::class)->create()->id,
+        ])->assertStatus(Response::HTTP_OK);
+
+        tap($order->fresh(), function (Order $order) use ($email, $partnerId) {
+            $this->assertEquals($email, $order->client_email);
+            $this->assertTrue($order->isConfirmed());
+            $this->assertEquals($partnerId, $order->partner_id);
+        });
     }
 
-    private function createAllOrders()
+    /**
+     * @test
+     */
+    public function send_email_if_status_changed_to_completed()
     {
-        factory(Order::class)->times($this->count)->states('newest')->create();
-        factory(Order::class)->times($this->count)->states('overtaken')->create();
-        factory(Order::class)->times($this->count)->states('current')->create();
-        factory(Order::class)->times($this->count)->states('completed')->create();
+        Mail::fake();
+        $order = factory(Order::class)->states('newest')->create();
+        factory(OrderProduct::class)->times(10)->create(['order_id' => $order->id]);
+        $order->status = Order::STATUS_COMPLETED;
+        $this->patch("/orders/{$order->id}", $order->toArray());
+
+        Mail::assertQueued(OrderCompleted::class);
     }
 }

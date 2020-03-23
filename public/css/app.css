@@ -8333,3 +8333,7 @@ button.close {
   }
 }
 
+[v-cloak] {
+  display: none;
+}
+

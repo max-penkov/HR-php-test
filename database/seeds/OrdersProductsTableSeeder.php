@@ -23,10 +23,10 @@ class OrdersProductsTableSeeder extends Seeder
         for ($orderId = 1; $orderId <= $limit; $orderId++) {
             $pLimit = rand(1,4);
             $order = $orders->where('id', $orderId)->first();
-            
+
 			for ($productsOrderCnt = 1; $productsOrderCnt <= $pLimit; $productsOrderCnt++) {
 				$product = $products->random();
-				\DB::table('order_products')->insert([				
+				\DB::table('order_products')->insert([
 					'order_id' => $orderId,
 					'product_id' => $product->id,
 					'quantity' => rand(1,3),
