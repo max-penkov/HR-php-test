@@ -25,7 +25,7 @@
 					<li><a href="{{ route('order.newest') }}">Заказы <span
 								class="sr-only">(current)</span></a></li>
 					<li><a href="{{ route('order.products') }}">Продукты</a></li>
-{{--					<li><a class="nav-link" href="{{ route('weather') }}">Погода</a></li>--}}
+					<li><a class="nav-link" href="{{ route('weather') }}">Погода</a></li>
 				</ul>
 			</div>
 		</div>

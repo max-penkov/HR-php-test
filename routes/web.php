@@ -29,6 +29,8 @@ Route::group([
     Route::get('/completed', 'OrderController@completed')->name('completed');
     Route::get('/{order}', 'OrderController@view')->name('view');
     Route::patch('/{order}', 'OrderController@update')->name('update');
-
 });
+
+//Weather
+Route::get('/weather', 'WeatherController@index')->name('weather');
 

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\UseCases;
 
-use App\Order;
 use App\OrderProduct;
-use App\Product;
 use App\Vendor;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -48,7 +46,6 @@ class ProductService
         if (isset($data['name'])) {
             $orderProduct->product()->update(['name' => $data['name']]);
         }
-
 
         return $orderProduct;
     }

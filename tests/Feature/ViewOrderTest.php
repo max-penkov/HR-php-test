@@ -26,6 +26,7 @@ class ViewOrderTest extends TestCase
      */
     public function view_order()
     {
+        $this->disableExceptionHandling();
         $order = factory(Order::class)->create();
 
         $this->get("/orders/{$order->id}")
