@@ -12,7 +12,7 @@
 				<tr>
 					<th scope="col"></th>
 					<th scope="col">Погода</th>
-					<th scope="col">Час</th>
+					<th scope="col">Время</th>
 					<th scope="col">Температура</th>
 				</tr>
 				</thead>
