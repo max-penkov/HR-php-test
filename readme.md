@@ -17,12 +17,6 @@
 - 10 подтвержден
 - 20 завершен
 
-Для верстки использовать bootstrap `/public/js/app.js`, `/public/css/app.css`
-
-Свой js код писать в файл `/public/js/script.js` 
-
-Свои css стили писать в файл `/public/css/style.css` 
-
 ## Техническое задание
 
 #### Обязательно
